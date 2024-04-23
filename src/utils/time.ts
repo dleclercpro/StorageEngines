@@ -6,8 +6,7 @@ export const sleep = async (duration: TimeDuration) => {
     await new Promise(resolve => setTimeout(resolve, ms));
 };
 
-export const getCurrentDateUTC = () => {
-    const now = new Date();
+export const toUTC = (now: Date) => {
 
     // Convert the date to UTC
     const year = now.getUTCFullYear();

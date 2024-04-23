@@ -1,8 +1,8 @@
 import { SEPARATOR } from "../../constants";
 
 export enum LogType {
-    Set = 'set',
-    Delete = 'delete',
+    Set = 'SET',
+    Delete = 'DELETE',
 };
 
 type LogArgs <V> = {
