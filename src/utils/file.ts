@@ -21,17 +21,17 @@ export const doesFileExist = (filepath: string) => {
 }
 
 export const readFile = async (filepath: string) => {
-    return fsReadFile(filepath);
+    return fsReadFile(filepath, { encoding: 'utf-8' });
+}
+
+export const createFile = async (filepath: string) => {
+    return fsWriteFile(filepath, '', { encoding: 'utf-8' });
+}
+
+export const appendToFile = async (filepath: string, data: string) => {
+    return fsAppendFile(filepath, data, { encoding: 'utf-8' });
 }
 
 export const deleteFile = async (filepath: string) => {
     return fsDeleteFile(filepath);
-}
-
-export const createFile = async (filepath: string) => {
-    return fsWriteFile(filepath, '');
-}
-
-export const appendToFile = async (filepath: string, data: string) => {
-    return fsAppendFile(filepath, data);
 }
