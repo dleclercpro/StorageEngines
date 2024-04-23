@@ -1,8 +1,8 @@
-export interface IKeyValueDatabase<R> {
-    has(id: string): Promise<boolean>;
-    get(id: string): Promise<R | null>;
-    set(id: string, record: R): Promise<void>;
-    delete(id: string): Promise<void>;
+export interface IKeyValueDatabase<V> {
+    has(key: string): Promise<boolean>;
+    get(key: string): Promise<V | null>;
+    set(key: string, value: V): Promise<void>;
+    delete(key: string): Promise<void>;
 }
 
 
