@@ -3,21 +3,46 @@ import { logger } from './logger';
 import LogDatabase from './models/databases/LogDatabase';
 import { DATA_DIR } from './constants';
 import LineDatabase from './models/databases/LineDatabase';
+import BytesDatabase from './models/databases/BytesDatabase';
+
+
+
+// Test databases
+const testLogsDatabase = async () => {
+    const logsDatabase = new LogDatabase<string>(new LineDatabase(DATA_DIR));
+
+    const key = 'test';
+
+    await logsDatabase.add(key, '0');
+    let log = await logsDatabase.get(key);
+    logger.info(`Log entry: ${log?.toString() ?? null}`);
+    
+    await logsDatabase.remove(key);
+    log = await logsDatabase.get(key);
+    logger.info(`Log entry: ${log?.toString() ?? null}`);
+}
+
+
+
+const testBytesDatabase = async () => {
+    const bytesDb = new BytesDatabase();
+
+    const key = 'test';
+    
+    bytesDb.add(key, '0');
+    logger.info(`Bytes DB: ${bytesDb.toString()}`);
+
+    const value = await bytesDb.get(key);
+    logger.info(`Bytes for key '${key}': ${value ?? null}`);
+}
 
 
 
 const execute = async () => {
     logger.debug(`Environment: ${ENV}`);
-
-    const db = new LogDatabase<string>(new LineDatabase(DATA_DIR));
-
-    await db.add('test', '0');
-    let log = await db.get('test');
-    logger.info(`Log entry: ${log?.toString() ?? null}`);
     
-    await db.remove('test');
-    log = await db.get('test');
-    logger.info(`Log entry: ${log?.toString() ?? null}`);
+    await testLogsDatabase();
+    // await testBytesDatabase();
 }
 
 

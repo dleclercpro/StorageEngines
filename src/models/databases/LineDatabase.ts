@@ -1,5 +1,5 @@
 import path from 'path';
-import { DATA_DIR, LOG_FILE_EXT, NEWLINE, SEPARATOR } from '../../constants';
+import { DATA_DIR, LOG_EXT, NEW_LINE, SEPARATOR } from '../../constants';
 import { logger } from '../../logger';
 import { appendToFile, readDir, readFile } from '../../utils/file';
 import { toUTC, isValidDate } from '../../utils/time';
@@ -8,9 +8,11 @@ import { unique } from '../../utils/array';
 
 export class LineDatabase {
     private dir: string;
+    private separator: string;
 
-    public constructor(dir: string) {
+    public constructor(dir: string, separator: string = SEPARATOR) {
         this.dir = dir;
+        this.separator = separator;
     }
 
     private async listLogFiles() {
@@ -24,7 +26,7 @@ export class LineDatabase {
                 const date = path.parse(file).name;
                 const ext = path.extname(file);
                 
-                return isValidDate(date) && ext === LOG_FILE_EXT;
+                return isValidDate(date) && ext === LOG_EXT;
             });
         if (unique(filteredFilenames).length !== filteredFilenames.length) {
             throw new Error('Filenames with same date are not allowed!');
@@ -63,12 +65,12 @@ export class LineDatabase {
             const file = await readFile(path.join(DATA_DIR, filename));
             
             const lines = file
-                .split(NEWLINE)
+                .split(NEW_LINE)
                 .filter(line => line !== '');
             const processedLines = lines
                 .map((line, i) => {
                     const index = i;
-                    const [timestamp, type, key, value] = line.split(SEPARATOR);
+                    const [timestamp, type, key, value] = line.split(this.separator);
     
                     return {
                         index,
@@ -96,11 +98,11 @@ export class LineDatabase {
 
     private async set(type: LogType, key: string, value: string) {
         const now = new Date();
-        const filepath = path.join(DATA_DIR, `${toUTC(now)}.log`);
+        const filepath = path.join(DATA_DIR, toUTC(now) + LOG_EXT);
 
-        const line = `${now.getTime()}:${type}:${key}:${value}`;
+        const line = [now.getTime(), type, key, value].join(this.separator);
 
-        await appendToFile(filepath, line + NEWLINE);
+        await appendToFile(filepath, line + NEW_LINE);
     }
 
     public async add(key: string, value: string) {
