@@ -9,8 +9,7 @@ export const generateEmptyDatabase = (size: number = BYTES_DATABASE_MAX_SIZE) =>
 
     logger.trace(`Generating empty database of ${size}B...`);
     const db = new Array(size);
-    
-    logger.trace(`Done!`);
+
     return db;
 }
 
@@ -70,13 +69,12 @@ export class BytesDatabase {
 
             pairSizeAsArray.push(char);
         }
-
         const pairSize = parseInt(pairSizeAsArray.join(''), 10);
 
         const startIndex = index + pairSizeAsArray.length + 1; // Don't forget the separator between the key-value pair length and the rest of the data
         const endIndex = startIndex + pairSize + 1 // Don't forget the separator between the key and value!;
 
-        logger.trace(`Found key-value pair between bytes ${startIndex} and ${endIndex}.`);
+        logger.trace(`Key-value data found between bytes ${startIndex} and ${endIndex}.`);
 
         return {
             startIndex,
