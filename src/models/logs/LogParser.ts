@@ -1,14 +1,14 @@
-import { SEPARATOR } from '../../constants';
 import Log, { LogType } from './Log';
 
 class LogParser<V> {
+    private separator: string;
 
-    public constructor() {
-
+    public constructor(separator: string) {
+        this.separator = separator;
     }
 
-    public parse(logString: string, separator: string = SEPARATOR) {
-        const parts = logString.split(separator);
+    public parse(logString: string) {
+        const parts = logString.split(this.separator);
         if (parts.length < 4) {
             throw new Error(`Log string is not in the expected format: ${logString}`);
         }
@@ -20,7 +20,7 @@ class LogParser<V> {
 
         const type = parts[1] as LogType;
         const key = parts[2];
-        const value = parts.slice(3).join(separator) as unknown as V; // Assume the remaining part is the value, rejoining any colons.
+        const value = parts.slice(3).join(this.separator) as unknown as V; // Assume the remaining part is the value, rejoining any colons.
 
         return new Log<V>({ type, timestamp, key, value });
     }

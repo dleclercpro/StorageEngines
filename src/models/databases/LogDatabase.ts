@@ -9,7 +9,7 @@ export class LogDatabase<V> {
 
     public constructor(db: LineDatabase) {
         this.db = db;
-        this.parser = new LogParser<V>();
+        this.parser = new LogParser<V>(db.getSeparator());
     }
 
     public async has(key: string) {

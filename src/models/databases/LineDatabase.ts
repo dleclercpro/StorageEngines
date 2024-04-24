@@ -1,5 +1,5 @@
 import path from 'path';
-import { DATA_DIR, LOG_EXT, NEW_LINE, SEPARATOR } from '../../constants';
+import { DATA_DIR, LOG_EXT, NEW_LINE } from '../../constants';
 import { logger } from '../../logger';
 import { appendToFile, readDir, readFile } from '../../utils/file';
 import { toUTC, isValidDate } from '../../utils/time';
@@ -10,7 +10,7 @@ export class LineDatabase {
     private dir: string;
     private separator: string;
 
-    public constructor(dir: string, separator: string = SEPARATOR) {
+    public constructor(dir: string, separator: string) {
         this.dir = dir;
         this.separator = separator;
     }
@@ -94,6 +94,10 @@ export class LineDatabase {
 
         logger.warn(`Could not find value for key: ${key}`);
         return null;
+    }
+
+    public getSeparator() {
+        return this.separator;
     }
 
     private async set(type: LogType, key: string, value: string) {
